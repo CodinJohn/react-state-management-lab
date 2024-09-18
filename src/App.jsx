@@ -4,7 +4,9 @@ import './App.css'
 const App = () => {
   const [team, setTeam] = useState([]);
   const [money, setMoney] = useState(100);
-  const zombieFighters = [
+  const [totalStrength, setTotalStrength] = useState(0);
+  const [totalAgility, setTotalAgility] = useState(0);
+  const [zombieFighters, setZombieFighters] = useState([
     {
       name: 'Survivor',
       price: 12,
@@ -75,11 +77,30 @@ const App = () => {
       agility: 6,
       img: 'https://via.placeholder.com/150/602b9e',
     },
-  ];
+  ]);
+
+  const handleAddFighter = (fighter) => {
+    if (money >= fighter.price) {
+      setTeam([...team, fighter]);
+      setMoney(money - fighter.price);
+      setTotalStrength(totalStrength + fighter.strength)
+      setTotalAgility(totalAgility + fighter.agility)
+
+    } else {
+      console.log('No more funds!')
+    }
+  };
+
+  const handleRemoveFighter = (fighterToRemove) => {
+      setTeam(team.filter(fighter => fighter.name !== fighterToRemove.name));
+      setMoney(money + fighterToRemove.price);
+      setTotalStrength(totalStrength - fighterToRemove.strength)
+      setTotalAgility(totalAgility - fighterToRemove.agility)
+  };
 
   return (
     <div>
-      <h1>Zombie Fighter Team</h1>
+      <h1>Zombie Fighters Team</h1>
       <h2>Money: ${money}</h2>
       <ul>
         {zombieFighters.map((fighter, index) => (
@@ -89,12 +110,32 @@ const App = () => {
             <h3>Price: ${fighter.price}</h3>
             <h3>Strength: {fighter.strength}</h3>
             <h3>Agility: {fighter.agility}</h3>
-            <button onClick={() => addFighter(fighter)}>Add</button>
+            <button onClick={() => handleAddFighter(fighter)}>Add</button>
           </li>
         ))}
       </ul>
+      <h1>Your Fighting Team</h1>
+      {team.length === 0 ? (
+        <p>Pick some team members!</p>
+      ) : (
+        <ul>
+          {team.map((member, index) => (
+            <li key={index}>
+              <img src={member.img} />
+              <h2>Name: {member.name}</h2>
+              <h3>Price: ${member.price}</h3>
+              <h3>Strength: {member.strength}</h3>
+              <h3>Agility: {member.agility}</h3>
+              <button onClick={() => handleRemoveFighter(member)}>Remove</button>
+
+            </li>
+          ))}
+        </ul>
+      )}
+      <h2>Total Team Strength: {totalStrength}</h2>
+      <h2>Total Team Agility: {totalAgility}</h2>
     </div>
-  );
-}
+  )
+};
 
 export default App
