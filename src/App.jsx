@@ -80,6 +80,7 @@ const App = () => {
   return (
     <div>
       <h1>Zombie Fighter Team</h1>
+      <h2>Money: ${money}</h2>
       <ul>
         {zombieFighters.map((fighter, index) => (
           <li key={index}>
